@@ -1,0 +1,10 @@
+<launch>
+
+<arg name="trained_ubc_xml_path" default="/usr/local/share/OpenCV/haarcascades/haarcascade_mcs_upperbody.xml" />
+
+<!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
+<node name="upperbody_filter" pkg="upperbody_filter" type="upperbody_filter">
+	<param name="trained_ubc_xml_path" value="$(arg trained_ubc_xml_path)"/>
+</node>
+
+</launch>

@@ -1,0 +1,21 @@
+<launch>
+
+<arg name="min_confidence" default="-2.2" />
+<arg name="min_height" default="1.3" />
+<arg name="max_height" default="2.3" />
+<arg name="voxel_size" default="0.06" />
+<arg name="ground_filter_up_limit" default="0.8" />
+<arg name="ground_filter_down_limit" default="2.0" />
+
+<!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
+<node name="ground_based_detector" pkg="ground_based_detector" type="ground_based_detector">
+	<param name="svm" value="$(find ground_based_detector)/svm/svm_conf.yaml"/>
+	<param name="min_confidence" value="$(arg min_confidence)"/>
+	<param name="min_h" value="$(arg min_height)"/>
+	<param name="max_h" value="$(arg max_height)"/>
+	<param name="voxel_size" value="$(arg voxel_size)"/>
+	<param name="grf_up" value="$(arg ground_filter_up_limit)"/>
+	<param name="grf_down" value="$(arg ground_filter_down_limit)"/>
+</node>
+
+</launch>

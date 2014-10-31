@@ -1,0 +1,12 @@
+<launch>
+
+<arg name="ground_filter_up_limit" default="0.7" />
+<arg name="ground_filter_down_limit" default="2.0" />
+
+<!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
+<node name="ground_estimator" pkg="ground_estimator" type="ground_estimator">
+	<param name="grf_up" value="$(arg ground_filter_up_limit)"/>
+	<param name="grf_down" value="$(arg ground_filter_down_limit)"/>
+</node>
+
+</launch>

@@ -1,0 +1,8 @@
+<launch>
+	<!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
+	<include file="$(find ground_based_detector)/launch/ground_based_detector.launch"/>
+	<include file="$(find upperbody_filter)/launch/upperbody_filter.launch"/>
+	<include file="$(find human_markers_publisher)/launch/human_markers_publisher.launch"/>
+	<include file="$(find region_normalizer)/launch/region_normalizer.launch"/>
+	<node name="rviz" pkg="rviz" type="rviz"></node>
+</launch>

@@ -1,0 +1,6 @@
+<launch>
+
+<node name="region_normalizer" pkg="region_normalizer" type="region_normalizer">
+</node>
+
+</launch>
