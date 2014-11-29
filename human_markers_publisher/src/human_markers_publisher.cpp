@@ -4,6 +4,7 @@
 #include <tf/transform_listener.h>
 #include <tf/message_filter.h>
 #include <visualization_msgs/Marker.h>
+#include <visualization_msgs/MarkerArray.h>
 #include <ground_based_detector/human.h>
 #include <ground_based_detector/humanArray.h>
 
@@ -13,6 +14,7 @@ std::string fixed_frame;
 
 void humans_cb_ (const ground_based_detector::humanArray::ConstPtr& callback_humans) {
   unsigned int k = 0;
+  visualization_msgs::MarkerArray marker_array;
   for(std::vector<ground_based_detector::human>::const_iterator it = callback_humans->humans.begin(); it != callback_humans->humans.end(); ++it) {
   	visualization_msgs::Marker m;
     m.header.stamp = ros::Time::now();
@@ -31,8 +33,10 @@ void humans_cb_ (const ground_based_detector::humanArray::ConstPtr& callback_hum
     m.color.r = 0;
     m.color.g = 255.0;
     m.color.b = 0;
-  	markersPublisher.publish(m);
+  	//markersPublisher.publish(m);
+    marker_array.markers.push_back(m);
   }
+  markersPublisher.publish(marker_array);
 }
 
 bool interrupted = false;
@@ -48,7 +52,7 @@ int main(int argc, char *argv[]) {
 
   nodeHandle.getParam("human_markers_publisher/fixed_frame", fixed_frame);
   ros::Subscriber subscriberHumans = nodeHandle.subscribe<ground_based_detector::humanArray>("upperbody_filter/detected_human_clusters", 1, humans_cb_);
-  markersPublisher = nodeHandle.advertise<visualization_msgs::Marker>("human_markers_publisher/human_markers", 20);
+  markersPublisher = nodeHandle.advertise<visualization_msgs::MarkerArray>("human_markers_publisher/human_markers", 20);
 
   signal(SIGINT, signal_handler);
   while(ros::ok() && !interrupted) {
