@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "object_recognition_by_parts")
+set(object_recognition_by_parts_MAINTAINER "Hilton Bristow <hbristow@willowgarage.com>")
+set(object_recognition_by_parts_DEPRECATED "")
+set(object_recognition_by_parts_VERSION "0.0.1")
+set(object_recognition_by_parts_BUILD_DEPENDS "cvmatio" "cv_bridge" "ecto" "image_geometry" "image_transport" "message_filters" "object_recognition_core" "openni-dev" "opencv2" "roscpp" "vision_opencv" "pcl" "pcl_ros")
+set(object_recognition_by_parts_RUN_DEPENDS "cvmatio" "cv_bridge" "ecto" "image_geometry" "image_transport" "message_filters" "opencv2" "object_recognition_core" "openni-dev" "pcl" "pcl_ros")
+set(object_recognition_by_parts_BUILDTOOL_DEPENDS "catkin")

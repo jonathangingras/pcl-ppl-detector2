@@ -1,0 +1,8 @@
+prefix=/home/jorobot/Desktop/PartsBasedDetector/build/devel
+
+Name: object_recognition_by_parts
+Description: Description of object_recognition_by_parts
+Version: 0.0.1
+Cflags: -I/home/jorobot/Desktop/PartsBasedDetector/include
+Libs: -L/home/jorobot/Desktop/PartsBasedDetector/build/devel/lib 
+Requires: 
