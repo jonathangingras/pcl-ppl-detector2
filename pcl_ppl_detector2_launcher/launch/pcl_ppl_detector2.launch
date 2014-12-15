@@ -1,8 +1,19 @@
 <launch>
-	<include file="$(find openni_launch)/launch/openni.launch"/>
+	<!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
 	<include file="$(find ground_based_detector)/launch/ground_based_detector.launch"/>
+	<include file="$(find object_recognition_by_parts)/launch/detect.launch"/>
+	<include file="$(find upperbody_dpm_filter)/launch/upperbody_dpm_filter.launch"/>
 	<include file="$(find upperbody_filter)/launch/upperbody_filter.launch"/>
-	<include file="$(find human_markers_publisher)/launch/human_markers_publisher.launch"/>
-	<include file="$(find region_normalizer)/launch/region_normalizer.launch"/>
-	<!--<node name="rviz" pkg="rviz" type="rviz"></node>-->
+	
+	<include file="$(find human_markers_publisher)/launch/human_markers_publisher.launch" ns="dpm">
+		<arg name="filter_node" value="/upperbody_dpm_filter/detected_human_clusters" />
+	</include>
+
+	<include file="$(find human_markers_publisher)/launch/human_markers_publisher.launch" ns="violajones">
+		<arg name="filter_node" value="/upperbody_filter/detected_human_clusters" />
+		<arg name="g" value="0.0" />
+		<arg name="b" value="255.0" />
+	</include>
+	
+	<node name="rviz" pkg="rviz" type="rviz"></node>
 </launch>

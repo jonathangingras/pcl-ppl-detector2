@@ -1,10 +1,18 @@
 <launch>
 
 <arg name="fixed_frame" default="/camera_depth_frame" />
+<arg name="filter_node" default="" />
+<arg name="r" default="0" />
+<arg name="g" default="255" />
+<arg name="b" default="0" />
 
 <!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
 <node name="human_markers_publisher" pkg="human_markers_publisher" type="human_markers_publisher">
 	<param name="fixed_frame" value="$(arg fixed_frame)"/>
+	<param name="filter_node" value="$(arg filter_node)"/>
+	<param name="r" value="$(arg r)"/>
+	<param name="g" value="$(arg g)"/>
+	<param name="b" value="$(arg b)"/>
 </node>
 
 </launch>

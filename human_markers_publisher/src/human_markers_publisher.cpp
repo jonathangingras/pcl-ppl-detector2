@@ -8,9 +8,9 @@
 #include <ground_based_detector/human.h>
 #include <ground_based_detector/humanArray.h>
 
-//ground_based_detector::humanArray potential_humans;
 ros::Publisher markersPublisher;
 std::string fixed_frame;
+double r, g, b;
 
 void humans_cb_ (const ground_based_detector::humanArray::ConstPtr& callback_humans) {
   unsigned int k = 0;
@@ -21,7 +21,7 @@ void humans_cb_ (const ground_based_detector::humanArray::ConstPtr& callback_hum
     m.header.frame_id = fixed_frame;
     m.ns = "HUMANS";
     m.id = ++k;
-    m.type = visualization_msgs::Marker::CYLINDER;//m.CYLINDER;
+    m.type = visualization_msgs::Marker::CYLINDER;
     m.pose.position.x = it->tcenter_z;
     m.pose.position.y = -it->tcenter_x;
     m.pose.position.z = -it->tcenter_y;
@@ -30,10 +30,9 @@ void humans_cb_ (const ground_based_detector::humanArray::ConstPtr& callback_hum
     m.scale.z = it->height;
     m.color.a = 0.5;
     m.lifetime = ros::Duration(0.2);
-    m.color.r = 0;
-    m.color.g = 255.0;
-    m.color.b = 0;
-  	//markersPublisher.publish(m);
+    m.color.r = r;
+    m.color.g = g;
+    m.color.b = b;
     marker_array.markers.push_back(m);
   }
   markersPublisher.publish(marker_array);
@@ -46,12 +45,17 @@ void signal_handler(int signal) {
 
 int main(int argc, char *argv[]) {
 	// Initialize ROS
-  ros::init (argc, argv, "upperbody_filter");
+  ros::init (argc, argv, "human_markers_publisher");
   ros::NodeHandle nodeHandle;
-  //tf::TransformListener transform_listener;
+  std::string filter_node;
 
   nodeHandle.getParam("human_markers_publisher/fixed_frame", fixed_frame);
-  ros::Subscriber subscriberHumans = nodeHandle.subscribe<ground_based_detector::humanArray>("upperbody_filter/detected_human_clusters", 1, humans_cb_);
+  nodeHandle.getParam("human_markers_publisher/filter_node", filter_node);
+  nodeHandle.getParam("human_markers_publisher/r", r);
+  nodeHandle.getParam("human_markers_publisher/g", g);
+  nodeHandle.getParam("human_markers_publisher/b", b);
+
+  ros::Subscriber subscriberHumans = nodeHandle.subscribe<ground_based_detector::humanArray>(filter_node, 1, humans_cb_);
   markersPublisher = nodeHandle.advertise<visualization_msgs::MarkerArray>("human_markers_publisher/human_markers", 20);
 
   signal(SIGINT, signal_handler);

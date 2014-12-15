@@ -1,0 +1,6 @@
+<launch>
+
+<node name="upperbody_dpm_filter" pkg="upperbody_dpm_filter" type="upperbody_dpm_filter">
+</node>
+
+</launch>
