@@ -6,9 +6,6 @@
   
 #include <pcl/console/parse.h>
 #include <pcl/point_types.h>
-//#include <pcl/visualization/pcl_visualizer.h>
-//#include <pcl/filters/voxel_grid.h>
-//#include <pcl/filters/extract_indices.h>
 #include <pcl/sample_consensus/sac_model_plane.h>
 #include <pcl/sample_consensus/model_types.h>
 #include <pcl/sample_consensus/method_types.h>
@@ -19,6 +16,14 @@
 #include <ros/ros.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <sensor_msgs/PointCloud2.h>
+
+#include <signal.h>
+#include <string>
+#include <ros/ros.h>
+#include <tf/transform_listener.h>
+#include <tf/message_filter.h>
+#include <visualization_msgs/Marker.h>
+#include <visualization_msgs/MarkerArray.h>
 
 #include <ground_estimator/ground_parameters.h>
 
@@ -33,6 +38,36 @@ ros::Publisher groundPlanePublisher;
 PointCloudT::Ptr cloud(new PointCloudT);
 
 boost::mutex mutex;
+
+ros::Publisher markersPublisher;
+std::string fixed_frame;
+
+void publish_arrow (const ground_estimator::ground_parameters& parameters) {
+  visualization_msgs::Marker m;
+  m.header.stamp = ros::Time::now();
+  m.header.frame_id = fixed_frame;
+  m.ns = "GROUND_NORMAL";
+  m.id = 1;
+  m.type = visualization_msgs::Marker::ARROW;
+  m.pose.position.x = 3;
+  m.pose.position.y = 0;
+  m.pose.position.z = 0;
+  m.scale.x = 2;
+  m.scale.y = 0.15;
+  m.scale.z = 0.15;
+  m.color.a = 1;
+  m.lifetime = ros::Duration(0.2);
+  m.color.r = 255.0;
+  m.color.g = 0.0;
+  m.color.b = 0.0;
+
+  m.pose.orientation.x = parameters.a/parameters.d;
+  m.pose.orientation.y = parameters.b/parameters.d;
+  m.pose.orientation.z = parameters.c/parameters.d;
+  m.pose.orientation.w = 1;
+
+  markersPublisher.publish(m);
+}
 
 void cloud_cb_ (const sensor_msgs::PointCloud2ConstPtr& callback_cloud) {
   PointCloudT::ConstPtr const_cloud(cloud);
@@ -79,23 +114,25 @@ void cloud_cb_ (const sensor_msgs::PointCloud2ConstPtr& callback_cloud) {
   published_plane.d = ground_coefficients.values[3];
 
   groundPlanePublisher.publish(published_plane);
+  publish_arrow(published_plane);
 }
 
 
 int main (int argc, char** argv) {
   // Initialize ROS
-  ros::init (argc, argv, "ground_based_detector");
+  ros::init (argc, argv, "ground_estimator");
   ros::NodeHandle nodeHandle;
 
   // Read parameters
-  nodeHandle.getParam("ground_based_detector/grf_up", groud_filter_limit_up);
-  nodeHandle.getParam("ground_based_detector/grf_down", groud_filter_limit_down);
+  nodeHandle.getParam("ground_estimator/fixed_frame", fixed_frame);
+  nodeHandle.getParam("ground_estimator/grf_up", groud_filter_limit_up);
+  nodeHandle.getParam("ground_estimator/grf_down", groud_filter_limit_down);
 
   // Read Kinect live stream:
   // Create a ROS subscriber for the input point cloud
   ros::Subscriber subscriberCloud = nodeHandle.subscribe<sensor_msgs::PointCloud2>("/camera/depth_registered/points", 1, cloud_cb_);
   groundPlanePublisher = nodeHandle.advertise<ground_estimator::ground_parameters>("ground_estimator/ground_plane_parameters", 20);
-  
+  markersPublisher = nodeHandle.advertise<visualization_msgs::Marker>("ground_estimator/plane_parameters", 20);
   // Main loop:
   ros::spin();
 

@@ -1,10 +1,12 @@
 <launch>
 
-<arg name="ground_filter_up_limit" default="0.7" />
+<arg name="fixed_frame" default="/camera_depth_frame" />
+<arg name="ground_filter_up_limit" default="0.8" />
 <arg name="ground_filter_down_limit" default="2.0" />
 
 <!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
 <node name="ground_estimator" pkg="ground_estimator" type="ground_estimator">
+	<param name="fixed_frame" value="$(arg fixed_frame)"/>
 	<param name="grf_up" value="$(arg ground_filter_up_limit)"/>
 	<param name="grf_down" value="$(arg ground_filter_down_limit)"/>
 </node>
