@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 	// Initialize ROS
   ros::init (argc, argv, "upperbody_filter");
   ros::NodeHandle nodeHandle;
-  humanPublisher = nodeHandle.advertise<ground_based_detector::humanArray>("upperbody_dpm_filter/detected_human_clusters", 20);
+  humanPublisher = nodeHandle.advertise<ground_based_detector::humanArray>("/upperbody_dpm_filter/detected_human_clusters", 20);
 
   UpperBodyDPMFilter UpperBodyDPMFilter(dpm_mutex);
   UpperBodyDPMFilter_ptr = &UpperBodyDPMFilter;

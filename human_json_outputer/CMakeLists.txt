@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(human_json_outputer)
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  visualization_msgs
+  std_msgs
+  tf
+  ground_based_detector
+)
+
+include_directories(
+	${catkin_INCLUDE_DIRS}
+	include
+)
+
+catkin_package()
+
+add_executable( human_json_outputer
+	src/human_json_outputer.cpp
+)
+
+target_link_libraries( human_json_outputer
+	${catkin_LIBRARIES}
+)

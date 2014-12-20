@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+import sys
+from ppl_detection_results.JSONResultLoader import JSONResultLoader
+from ppl_detection_results.ResultPlotter import *
+import argparse
+
+class PlotterFactory(object):
+	def __init__(self):
+		pass
+	def buildPlotter(self, fileName, fromSample = None, toSample = None, threshold = None):
+		loadedResults = JSONResultLoader(fileName).loadSamples()
+
+		try:
+			loadedResults[0]["people"]
+			return PeopleDetectorResultPlotter(fileName, loadedResults[fromSample:toSample])
+		except KeyError, e:
+			pass
+		try:
+			loadedResults[0]["legs"]
+			return LegTrackerResultPlotter(fileName, loadedResults[fromSample:toSample], threshold)
+		except KeyError, e:
+			pass
+		raise StandardError("Unknown Result JSON File!")
+
+def main(fileName, fromSample = None, toSample = None, threshold = None):
+	try:
+		PlotterFactory().buildPlotter(fileName, fromSample, toSample, threshold).plot(None,(0,5.5))
+	except StandardError, e:
+		print(e)
+
+if __name__ == '__main__':
+	parser = argparse.ArgumentParser()
+	parser.add_argument('fileName', metavar='filename', type=str, help='the JSON results filename')
+	parser.add_argument('--threshold', dest='threshold', type=int, default=None, help='minimum probability threshold')
+	parser.add_argument('--from', dest='fromSample', type=int, default=None, help='first sample to consider')
+	parser.add_argument('--to', dest='toSample', type=int, default=None, help='last sample to consider')
+	args = parser.parse_args()
+
+	main(args.fileName, args.fromSample, args.toSample, args.threshold)

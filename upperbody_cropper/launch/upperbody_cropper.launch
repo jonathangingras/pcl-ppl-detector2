@@ -1,0 +1,7 @@
+<launch>
+
+<!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
+<node name="upperbody_cropper" pkg="upperbody_cropper" type="upperbody_cropper">
+</node>
+
+</launch>

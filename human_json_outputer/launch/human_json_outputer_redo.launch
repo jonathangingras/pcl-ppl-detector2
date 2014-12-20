@@ -1,0 +1,8 @@
+<launch>
+
+<node name="human_json_outputer" pkg="human_json_outputer" type="human_json_outputer" ns="redoexperiment" >
+	<param name="filter_node" value="/redoexperiment/upperbody_dpm_filter/detected_human_clusters" />
+	<param name="provider" value="dpm2"/>
+</node>
+
+</launch>

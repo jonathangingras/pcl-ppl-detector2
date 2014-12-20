@@ -1,5 +1,6 @@
 <launch>
 	<!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
+	<include file="$(find ground_estimator)/launch/ground_estimator.launch"/>
 	<include file="$(find ground_based_detector)/launch/ground_based_detector.launch"/>
 	<include file="$(find object_recognition_by_parts)/launch/detect.launch"/>
 	<include file="$(find upperbody_dpm_filter)/launch/upperbody_dpm_filter.launch"/>
@@ -15,5 +16,7 @@
 		<arg name="b" value="255.0" />
 	</include>
 	
+	<!--<include file="$(find upperbody_cropper)/launch/upperbody_cropper.launch" />-->
+
 	<node name="rviz" pkg="rviz" type="rviz"></node>
 </launch>

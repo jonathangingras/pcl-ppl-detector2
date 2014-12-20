@@ -19,7 +19,7 @@ bool UpperBodyDPMFilter::humanMatchesDPMParts(ground_based_detector::human& pers
     
     for(std::vector<object_recognition_by_parts::Candidate>::iterator candidate = dpmCandidates.candidates.begin(); candidate != dpmCandidates.candidates.end(); ++candidate) {
         Pixel dpmHead(candidate->centers[1].x, candidate->head_top);
-        if(pixelsFarerThan(18.75f + (6.25f * person.ttop_z), personTop, dpmHead)) {
+        if(pixelsFarerThan(25, personTop, dpmHead)) {
             continue;
         }
 
@@ -52,7 +52,7 @@ inline cv::Rect UpperBodyDPMFilter::getUpperBodyRoi(ground_based_detector::human
     Pixel::pixelUnit hwidth = hheight * 0.25 * 2.0;
     
     cv::Point topLeft(top.x - hwidth, top.y - (0.25 * hheight) );
-    cv::Point bottomRight(top.x + hwidth, centroid.y );
+    cv::Point bottomRight(top.x + hwidth, centroid.y + (1.25 * hheight) );
     
     preventBordersOverflow(topLeft, bottomRight);
     return cv::Rect(topLeft, bottomRight);

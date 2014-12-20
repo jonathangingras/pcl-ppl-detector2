@@ -1,0 +1,13 @@
+<launch>
+
+<arg name="filter_node" default="" />
+<arg name="provider" default="" />
+
+<!--<include file="$(find openni_launch)/launch/openni.launch"/>-->
+<node name="human_json_outputer" pkg="human_json_outputer" type="human_json_outputer" ns="raw" >
+	<param name="filter_node" value="$(arg filter_node)"/>
+	<param name="provider" value="$(arg provider)"/>
+</node>
+
+</launch>
+ground_based_detector/detected_human_clusters

@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+import sys
+from ppl_detection_results.JSONResultLoader import JSONResultLoader
+from ppl_detection_results.ResultPlotter import *
+import argparse
+
+class CounterFactory(object):
+	def __init__(self):
+		pass
+
+	def count_results(self, loadedResults):
+		nb_results = 0
+		for i in loadedResults:
+			nb_results += i["nb_legs"]
+		return nb_results
+
+	def buildCounter(self, fileName, fromSample = None, toSample = None, threshold = None):
+		loadedResults = JSONResultLoader(fileName).loadSamples()
+
+		try:
+			loadedResults[0]["people"]
+			return self.count_results(loadedResults)
+		except KeyError, e:
+			pass
+		try:
+			loadedResults[0]["legs"]
+			return self.count_results(loadedResults)
+		except KeyError, e:
+			pass
+		raise StandardError("Unknown Result JSON File!")
+
+def main(fileName, fromSample = None, toSample = None, threshold = None):
+	try:
+		print(CounterFactory().buildCounter(fileName, fromSample, toSample, threshold))
+	except StandardError, e:
+		print(e)
+
+if __name__ == '__main__':
+	parser = argparse.ArgumentParser()
+	parser.add_argument('fileName', metavar='filename', type=str, help='the JSON results filename')
+	parser.add_argument('--threshold', dest='threshold', type=int, default=None, help='minimum probability threshold')
+	parser.add_argument('--from', dest='fromSample', type=int, default=None, help='first sample to consider')
+	parser.add_argument('--to', dest='toSample', type=int, default=None, help='last sample to consider')
+	args = parser.parse_args()
+
+	main(args.fileName, args.fromSample, args.toSample, args.threshold)

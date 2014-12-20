@@ -1,0 +1,18 @@
+<launch>
+
+	<include file="$(find human_json_outputer)/launch/human_json_outputer.launch" ns="dpm">
+		<arg name="filter_node" value="/upperbody_dpm_filter/detected_human_clusters" />
+		<arg name="provider" value="dpm" />
+	</include>
+
+	<include file="$(find human_json_outputer)/launch/human_json_outputer.launch" ns="violajones">
+		<arg name="filter_node" value="/upperbody_filter/detected_human_clusters" />
+		<arg name="provider" value="violajones" />
+	</include>
+
+	<include file="$(find human_json_outputer)/launch/human_json_outputer.launch" ns="raw">
+		<arg name="filter_node" value="/ground_based_detector/detected_human_clusters" />
+		<arg name="provider" value="raw" />
+	</include>
+
+</launch>
